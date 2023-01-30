@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Download recipe for Zulip desktop. Finds and downloads a Zulip desktop release disk image.</string>
+    <key>Identifier</key>
+    <string>com.github.autopkg.download.zulip-rc-en_US</string>
+    <key>Input</key>
+    <dict>
+        <key>RELEASE</key>
+        <string>latest</string>
+        <key>LOCALE</key>
+        <string>en-US</string>
+        <key>NAME</key>
+        <string>Zulip</string>
+        <key>DISABLE_CODE_SIGNATURE_VERIFICATION</key>
+        <string>True</string>
+        <key>GITHUB_REPO</key>
+        <string>zulip/zulip-desktop</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.2.0</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>GitHubReleasesInfoProvider</string>
+            <key>Arguments</key>
+            <dict>
+                <key>github_repo</key>
+                <string>%GITHUB_REPO%</string>
+                <key>latest_only</key>
+                <string>True</string>
+                <key>asset_regex</key>
+                <string>^.*-x64.dmg$</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>CodeSignatureVerifier</string>
+            <key>Arguments</key>
+            <dict>
+                <key>input_path</key>
+                <string>%RECIPE_CACHE_DIR%/%NAME%/Zulip.app</string>
+                <key>requirement</key>
+                <string>anchor apple generic and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "66KHCWMEYB")</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
